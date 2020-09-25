@@ -5,6 +5,7 @@ import BottomNavigationComponent from './components/BottomNavigation/BottomNavig
 import { NavigationButtons } from './constants';
 import AccountPage from './pages/AccountPage';
 import CardPage from './pages/CardPage';
+import ExchangePage from './pages/ExchangePage';
 
 class App extends Component {
   state = {
@@ -13,7 +14,6 @@ class App extends Component {
   };
 
   handleNavigateAction = (newValue: string, open: (route: string) => void) => {
-    
     this.setState((state) => ({
       ...state,
       bottomNavigationValue: newValue,
@@ -25,6 +25,12 @@ class App extends Component {
     return (
       <>
         <BrowserRouter>
+          <Route path={`/${NavigationButtons.account}`} component={ AccountPage }/>
+          <Route path={`/${NavigationButtons.card}`} component={ CardPage }/>
+          <Route path={`/${NavigationButtons.send}`} component={ CardPage }/>
+          <Route path={`/${NavigationButtons.support}`} component={ CardPage }/>
+          <Route path={`/${NavigationButtons.profile}`} component={ CardPage }/>
+          <Route path={`/exchange`} component={ ExchangePage }/>
           <Route render={(props) => {
             const { history: { push }} = props;
             return (
@@ -35,13 +41,8 @@ class App extends Component {
               />
             )
           }}/>
-          <Route path={`/${NavigationButtons.account}`} component={ AccountPage }/>
-          <Route path={`/${NavigationButtons.card}`} component={ CardPage }/>
-          <Route path={`/${NavigationButtons.send}`} component={ CardPage }/>
-          <Route path={`/${NavigationButtons.support}`} component={ CardPage}/>
-          <Route path={`/${NavigationButtons.profile}`} component={ CardPage}/>
+          
         </BrowserRouter>
-        
       </>
     );
   }

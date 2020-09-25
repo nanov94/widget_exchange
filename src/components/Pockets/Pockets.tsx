@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import SwipeableViews from 'react-swipeable-views';
-import MobileStepper from '@material-ui/core/MobileStepper';
 import { currencies } from '../../constants';
+import Swipe from "../Swipe/Swipe";
 
 type Currency = {
   amount: number;
@@ -26,30 +25,19 @@ class Pockets extends Component {
   };
 
   render() {
-    return <>
-      <SwipeableViews
-        axis={'x'}
-        index={this.state.walletNumber}
-        onChangeIndex={this.handleChangeWallet}
-        enableMouseEvents>
-          {
-            this.state.wallets.map((wallet) => (
-              <>
-                <div> { wallet.symbol } { wallet.amount }</div>
-                <div> { wallet.code } - { wallet.name }</div>
-              </>
-            ))
-          }
-      </SwipeableViews>
-      <MobileStepper
-        variant="dots"
-        steps={this.state.wallets.length}
-        position="static"
-        activeStep={this.state.walletNumber}
-        nextButton={null}
-        backButton={null}
-      />
-    </>;
+    return (<Swipe
+      activeItem={ this.state.walletNumber }
+      changeActiveItem={(num: number) => this.handleChangeWallet(num)}
+      countSteps={ this.state.wallets.length }>
+      {
+        this.state.wallets.map((wallet) => (
+          <>
+            <div> { wallet.symbol } { wallet.amount }</div>
+            <div> { wallet.code } - { wallet.name }</div>
+          </>
+        ))
+      }
+    </Swipe>);
   }
 }
 

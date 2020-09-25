@@ -1,3 +1,5 @@
+export const currencyExchangeRapidapiHostEndpoint = 'currency-exchange.p.rapidapi.com';
+
 export const currencies = {
   EUR: { code: 'EUR', name: 'Euro', symbol: '€' },
   GBP: { code: 'GBP', name: 'British Pound', symbol: '£' },
@@ -12,4 +14,7 @@ export enum NavigationButtons {
   profile = 'Profile',
 }
 
-export const currencyExchangeRapidapiHostEndpoint = 'currency-exchange.p.rapidapi.com';
+export const TextButtons = {
+  cancel: 'Cancel',
+  exchange: 'Exchange',
+}
