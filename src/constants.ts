@@ -2,7 +2,7 @@ export const currencyExchangeRapidapiHostEndpoint = 'currency-exchange.p.rapidap
 
 export const currencies = {
   EUR: { code: 'EUR', name: 'Euro', symbol: '€' },
-  GBP: { code: 'GBP', name: 'British Pound', symbol: '£' },
+  GBP: { code: 'RUB', name: 'Russian ruble', symbol: '₽' },
   USD: { code: 'USD', name: 'United States Dollar', symbol: '$' },
 }
 
