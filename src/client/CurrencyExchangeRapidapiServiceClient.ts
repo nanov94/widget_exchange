@@ -4,8 +4,8 @@ import { applicationKey } from '../configuration/configuration';
 import { ListOfCurrencyDTO } from './DTOs/ListOfCurrency';
 
 // API: https://rapidapi.com/fyhao/api/currency-exchange?endpoint=53aa60c0e4b0596140341c57
-export async function getExchangeCurrency(value: number, from: string, to: string): Promise<number> {
-    const url = `https://${currencyExchangeRapidapiHostEndpoint}/exchange?q=${value}&from=${from}&to=${to}`;
+export async function getExchangeCurrency(from: string, to: string): Promise<number> {
+    const url = `https://${currencyExchangeRapidapiHostEndpoint}/exchange?q=1&from=${from}&to=${to}`;
     const headers = {
         headers: {
             'x-rapidapi-host': currencyExchangeRapidapiHostEndpoint,
@@ -18,7 +18,7 @@ export async function getExchangeCurrency(value: number, from: string, to: strin
     return res.data;
 }
 
-export async function getListOfCurrency(value: number, from: string, to: string): Promise<ListOfCurrencyDTO[]> {
+export async function getListOfCurrency(): Promise<ListOfCurrencyDTO[]> {
   const url = `https://${currencyExchangeRapidapiHostEndpoint}/listquotes`;
   const headers = {
       headers: {

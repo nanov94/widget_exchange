@@ -26,14 +26,31 @@ export default class ExchangePage extends Component {
     wallets: testCurrencies,
     exchangedAmount: 0,
     convertedAmount: 0,
+    fromToRate: 0,
+    toFromRate: 0,
   };
 
   handleChangeWallet = async (fromWalletNumber: number, toWalletNumber: number, exchangedAmount: number = this.state.exchangedAmount) => {
-    getExchangeCurrency(exchangedAmount, testCurrencies[fromWalletNumber].code, testCurrencies[toWalletNumber].code)
+    const codeFrom = testCurrencies[fromWalletNumber].code;
+    const codeTo = testCurrencies[toWalletNumber].code;
+  
+    const exchangeCurrencyFromTo = getExchangeCurrency(codeFrom, codeTo);
+    const exchangeCurrencyToFrom = getExchangeCurrency(codeTo, codeFrom);
+
+    Promise.all([exchangeCurrencyFromTo, exchangeCurrencyToFrom])    
       .then((result: any) => {
-        this.state.convertedAmount = exchangedAmount * result.toFixed(2);
-        this.state.exchangedAmount = exchangedAmount;
-        this.setState((state) => ({ fromWalletNumber, toWalletNumber }));
+        this.setState((state) => ({
+          ...state,
+          fromToRate: result[0].toFixed(2),
+          toFromRate: result[1].toFixed(2),
+        }));
+        this.setState((state) => ({
+          ...state,
+          convertedAmount: exchangedAmount * this.state.fromToRate,
+          exchangedAmount: exchangedAmount,
+          fromWalletNumber,
+          toWalletNumber,
+        }));
       })
       .catch((error: any) => console.log(`Server is not available! Error: ${error}.`));
   };
@@ -58,7 +75,7 @@ export default class ExchangePage extends Component {
             ))
           }
         </Swipe>
-        <div> You have {} </div>
+        <div> You have 1{ testCurrencies[this.state.fromWalletNumber].symbol } = { this.state.toFromRate }{ testCurrencies[this.state.toWalletNumber].symbol }</div>
         <Swipe
           activeItem={ this.state.toWalletNumber }
           changeActiveItem={(num: number) => this.handleChangeWallet(this.state.fromWalletNumber, num)}
@@ -72,7 +89,7 @@ export default class ExchangePage extends Component {
             ))
           }
         </Swipe>
-        <div> You have {} </div>
+        <div> You have 1{ testCurrencies[this.state.toWalletNumber].symbol } = { this.state.fromToRate }{ testCurrencies[this.state.fromWalletNumber].symbol }</div>
         <TextField
           id="standard-password-input"
           label="Value"
