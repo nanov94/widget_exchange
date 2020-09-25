@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import IconButton from '@material-ui/core/IconButton/IconButton';
 
-interface ButtonsPropsComponent {
+interface ButtonsProps {
   buttons: any;
 }
 
-class Buttons extends Component<ButtonsPropsComponent> {
+class Buttons extends Component<ButtonsProps> {
 
   render() {
     return (<>

@@ -9,12 +9,12 @@ import LoopSharpIcon from '@material-ui/icons/LoopSharp';
 
 export default class AccountPage extends Component {
 
-  getButtons() {
+  getActionButtons() {
     return [<AddSharpIcon />, <LoopSharpIcon />, <ArrowRightAltSharpIcon />];
   }
 
   render() {
-    const buttons = this.getButtons();
+    const buttons = this.getActionButtons();
 
     return (
       <>
