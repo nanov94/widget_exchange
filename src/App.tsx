@@ -12,25 +12,36 @@ class App extends Component {
     navigationItems: [NavigationButtons.account, NavigationButtons.card, NavigationButtons.send, NavigationButtons.support, NavigationButtons.profile],
   };
 
-  handleNavigateAction = (newValue: string) => {
+  handleNavigateAction = (newValue: string, open: (route: string) => void) => {
+    
     this.setState((state) => ({
       ...state,
       bottomNavigationValue: newValue,
     }));
+    open(`/${newValue}`);
   };
 
   render() {
     return (
       <>
         <BrowserRouter>
-          <Route path="/account" component={AccountPage}/>
-          <Route path="/card" component={CardPage}/>
+          <Route render={(props) => {
+            const { history: { push }} = props;
+            return (
+              <BottomNavigationComponent
+                active={this.state.bottomNavigationValue}
+                navigateAction={(item: string) => this.handleNavigateAction(item, push)}
+                navigationItems={ this.state.navigationItems }
+              />
+            )
+          }}/>
+          <Route path={`/${NavigationButtons.account}`} component={ AccountPage }/>
+          <Route path={`/${NavigationButtons.card}`} component={ CardPage }/>
+          <Route path={`/${NavigationButtons.send}`} component={ CardPage }/>
+          <Route path={`/${NavigationButtons.support}`} component={ CardPage}/>
+          <Route path={`/${NavigationButtons.profile}`} component={ CardPage}/>
         </BrowserRouter>
-        <BottomNavigationComponent
-          active={this.state.bottomNavigationValue}
-          navigateAction={(item: string) => this.handleNavigateAction(item)}
-          navigationItems={ this.state.navigationItems }
-        />
+        
       </>
     );
   }
