@@ -11,3 +11,5 @@ export enum NavigationButtons {
   support = 'Support',
   profile = 'Profile',
 }
+
+export const currencyExchangeRapidapiHostEndpoint = 'currency-exchange.p.rapidapi.com';
