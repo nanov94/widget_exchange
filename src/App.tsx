@@ -4,7 +4,7 @@ import './App.css';
 import BottomNavigationComponent from './components/BottomNavigation/BottomNavigation';
 import { NavigationButtons } from './constants';
 import AccountPage from './pages/AccountPage/AccountPage';
-import CardPage from './pages/CardPage/CardPage';
+import StubPage from './pages/StubPage/StubPage';
 import ExchangePage from './pages/ExchangePage/ExchangePage';
 
 class App extends Component {
@@ -26,10 +26,10 @@ class App extends Component {
       <>
         <BrowserRouter>
           <Route path={`/${NavigationButtons.account}`} component={ AccountPage }/>
-          <Route path={`/${NavigationButtons.card}`} component={ CardPage }/>
-          <Route path={`/${NavigationButtons.send}`} component={ CardPage }/>
-          <Route path={`/${NavigationButtons.support}`} component={ CardPage }/>
-          <Route path={`/${NavigationButtons.profile}`} component={ CardPage }/>
+          <Route path={`/${NavigationButtons.card}`} component={ StubPage }/>
+          <Route path={`/${NavigationButtons.send}`} component={ StubPage }/>
+          <Route path={`/${NavigationButtons.support}`} component={ StubPage }/>
+          <Route path={`/${NavigationButtons.profile}`} component={ StubPage }/>
           <Route path={`/exchange`} component={ ExchangePage }/>
           <Route render={(props) => {
             const { history: { push }} = props;
