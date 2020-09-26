@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import IconButton from '@material-ui/core/IconButton/IconButton';
 
 interface ButtonsProps {
-  buttons: any;
+  buttons: any[];
+  handleClick: (event: any) => void;
 }
 
 class Buttons extends Component<ButtonsProps> {
@@ -11,7 +12,7 @@ class Buttons extends Component<ButtonsProps> {
     return (<>
         {
           this.props.buttons.map((btn: any) => 
-            <IconButton color="primary" aria-label="upload picture" component="span">
+            <IconButton color="primary" aria-label="upload picture" component="span" onClick={() => this.props.handleClick(btn)}>
               { btn }
             </IconButton>
           )

@@ -1,9 +1,25 @@
+
 export const currencyExchangeRapidapiHostEndpoint = 'currency-exchange.p.rapidapi.com';
 
 export const currencies = {
   EUR: { code: 'EUR', name: 'Euro', symbol: '€' },
-  GBP: { code: 'RUB', name: 'Russian ruble', symbol: '₽' },
+  RUB: { code: 'RUB', name: 'Russian ruble', symbol: '₽' },
   USD: { code: 'USD', name: 'United States Dollar', symbol: '$' },
+}
+
+export const TextButtons = {
+  cancel: 'Cancel',
+  exchange: 'Exchange',
+}
+
+export const messages = {
+  historyIsEmpty: 'History is empty',
+}
+
+export enum CurrencyCodes {
+  EUR = 'EUR',
+  RUB = 'RUB',
+  USD = 'USD'
 }
 
 export enum NavigationButtons {
@@ -14,7 +30,17 @@ export enum NavigationButtons {
   profile = 'Profile',
 }
 
-export const TextButtons = {
-  cancel: 'Cancel',
-  exchange: 'Exchange',
+export enum Operations {
+  EXCHANGE,
+  TOP_UP,
+  BANK,
+}
+
+export function getOperationMessage(type: Operations, data: string) {
+  switch(type) {
+    case Operations.EXCHANGE:
+      return `Exchange to ${data}`;
+    default:
+      return;
+  }
 }

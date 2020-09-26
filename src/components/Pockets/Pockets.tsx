@@ -1,44 +1,62 @@
 import React, { Component } from "react";
-import { currencies } from '../../constants';
 import Swipe from "../Swipe/Swipe";
+import { connect } from 'react-redux';
+import { Currencies } from "../../models/Currency";
+import { changeActiveWallet } from "../../actions/pocketAction";
 
-type Currency = {
-  amount: number;
-  code: string;
-  name: string;
-  symbol: string;
-};
+interface PocketStateToProps {
+  activeWalletNumber: number;
+  walletData: Currencies;
+  wallets: string[];
+}
 
-const testCurrencies: Currency[] = [
-  { amount: 500, ...currencies.EUR },
-  { amount: 100, ...currencies.GBP },
-  { amount: 200, ...currencies.USD }];
+interface PocketDispatchToProps {
+  changeActiveWallet: any;
+}
 
-class Pockets extends Component {
-  state = {
-    walletNumber: 0,
-    wallets: testCurrencies,
-  };
+type PocketProps = PocketStateToProps & PocketDispatchToProps;
 
+class Pockets extends Component<PocketProps> {
   handleChangeWallet = (walletNumber: number) => {
-    this.setState((state) => ({ walletNumber: walletNumber }));
+    this.props.changeActiveWallet(walletNumber);
+    this.setState((state) => ({ activeWalletNumber: walletNumber }));
   };
 
   render() {
     return (<Swipe
-      activeItem={ this.state.walletNumber }
+      activeItem={ this.props.activeWalletNumber }
       changeActiveItem={(num: number) => this.handleChangeWallet(num)}
-      countSteps={ this.state.wallets.length }>
+      countSteps={ this.props.wallets.length }>
       {
-        this.state.wallets.map((wallet) => (
-          <>
-            <div> { wallet.symbol } { wallet.amount }</div>
-            <div> { wallet.code } - { wallet.name }</div>
-          </>
-        ))
+        this.props.wallets.map((walletKey) => {
+          const wallet = this.props.walletData[walletKey];
+          return (
+            <>
+              <div> { wallet.symbol } { wallet.amount }</div>
+              <div> { wallet.code } - { wallet.name }</div>
+            </>
+          )
+        })
       }
     </Swipe>);
   }
 }
 
-export default Pockets;
+const mapStateToProps = (state: any) => {
+  const { pocket } = state;
+  const pocketStateToProps: PocketStateToProps = {
+    activeWalletNumber: pocket.activeWalletNumber,
+    wallets: pocket.wallets,
+    walletData: pocket.walletData,
+  }
+
+  return pocketStateToProps;
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    changeActiveWallet: (args: any) => dispatch(changeActiveWallet(args))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Pockets);
