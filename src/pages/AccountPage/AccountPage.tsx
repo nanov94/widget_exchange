@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import Buttons from '../components/Buttons/Buttons';
-import HistoryOperationsPocket from '../components/HistoryOperationsPocket/HistoryOperationsPocket';
-import Pockets from '../components/Pockets/Pockets';
-import { Operations } from '../constants';
+import Buttons from '../../components/Buttons/Buttons';
+import HistoryOperationsPocket from '../../components/HistoryOperationsPocket/HistoryOperationsPocket';
+import Pockets from '../../components/Pockets/Pockets';
+import { Operations } from '../../constants';
 
 import ArrowRightAltSharpIcon from '@material-ui/icons/ArrowRightAltSharp';
 import AddSharpIcon from '@material-ui/icons/AddSharp';
 import LoopSharpIcon from '@material-ui/icons/LoopSharp';
+
+import './AccountPage.scss';
 
 export default class AccountPage extends Component {
   state = {
@@ -26,11 +28,15 @@ export default class AccountPage extends Component {
     const buttons = this.getActionButtons();
 
     return (
-      <>
-        <Pockets></Pockets>
-        <Buttons buttons={buttons} handleClick={( ) => {}} />
-        <HistoryOperationsPocket operationIcons={ this.state.operations }></HistoryOperationsPocket>
-      </>
+      <div className="wrapAccountPage">
+        <div className="wrapPocketPanel">
+          <Pockets></Pockets>
+          <Buttons class="wrapAccountButton" buttons={buttons} handleClick={( ) => {}} />
+        </div>
+        <div className="wrapHistoryPanel">
+          <HistoryOperationsPocket operationIcons={ this.state.operations }></HistoryOperationsPocket>
+        </div>
+      </div>
     );
   }
 }

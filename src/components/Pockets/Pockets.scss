@@ -1,0 +1,23 @@
+.wrapWallet {
+  font-size: 30px;
+  padding: 50px;
+
+  & div {
+    justify-content: center;
+    display: flex;
+  }
+
+  & .amount {
+    font-weight: bold;
+    font-size: 40px;
+    align-items: baseline;
+
+    & .mainAmount {
+      font-size: 55px;
+    }
+  }
+  
+  & .currencyName {
+    color: #363636;
+  }
+}

@@ -1,0 +1,35 @@
+.wrapAccountPage {
+  height: 100vh;
+}
+
+.wrapPocketPanel {
+  width: 100%;
+  background: cornflowerblue;
+  padding-bottom: 20px;
+}
+
+.wrapHistoryPanel {
+  height: 55%;
+  width: 100%;
+  background: white;
+  overflow: auto;
+}
+
+.wrapAccountButton {
+  display: flex;
+  justify-content: space-between;
+  width: 30%;
+  margin: 0 auto;
+  padding: 20px;
+
+  .accountButton {
+    background: #0656964d;
+    border: 1px solid white;
+    color: white;
+
+    svg {
+      width: 50px;
+      height: 50px;
+    }
+  }
+}

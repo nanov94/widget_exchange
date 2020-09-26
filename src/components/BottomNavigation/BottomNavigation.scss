@@ -1,0 +1,14 @@
+.bottomNavigation {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: #19496e !important;
+
+  .bottomNavigationButton {
+    color: #4ba5e9 !important;
+  }
+
+  .bottomNavigationButton.Mui-selected {
+    color: white !important;
+  }
+}

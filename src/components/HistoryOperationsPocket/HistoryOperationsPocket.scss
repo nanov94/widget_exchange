@@ -1,0 +1,38 @@
+.today,
+.historyIsEmpty {
+  justify-content: center;
+  padding: 20px;
+  font-size: 30px;
+  display: flex;
+}
+
+.MuiListItemAvatar-root.operationIcon {
+  border-radius: 50px;
+  background: #03a9f44d;
+  padding: 15px;
+  width: 25px;
+  height: 25px;
+  min-width: 25px;
+  margin-right: 10px;
+}
+
+.wrapAmountChanges {
+  .toAmountChanges {
+    font-size: 25px;
+  }
+
+  .fromAmountChanges {
+    color: rgb(20, 104, 231);
+    font-size: 20px;
+  }
+
+  .fromAmountChanges,
+  .toAmountChanges {
+    justify-content: flex-end;
+    display: flex;
+  }
+}
+.operationsHistory {
+  overflow: auto;
+  height: inherit;
+}

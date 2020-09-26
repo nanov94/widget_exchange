@@ -5,26 +5,26 @@ import { ListOfCurrencyDTO } from './DTOs/ListOfCurrency';
 
 // API: https://rapidapi.com/fyhao/api/currency-exchange?endpoint=53aa60c0e4b0596140341c57
 export async function getExchangeCurrency(from: string, to: string): Promise<number> {
-    const url = `https://${currencyExchangeRapidapiHostEndpoint}/exchange?q=1&from=${from}&to=${to}`;
-    const headers = {
-        headers: {
-            'x-rapidapi-host': currencyExchangeRapidapiHostEndpoint,
-            'x-rapidapi-key': applicationKey,
-        }
-    };
+  const url = `https://${currencyExchangeRapidapiHostEndpoint}/exchange?q=1&from=${from}&to=${to}`;
+  const headers = {
+    headers: {
+      'x-rapidapi-host': currencyExchangeRapidapiHostEndpoint,
+      'x-rapidapi-key': applicationKey,
+    }
+  };
 
-    const res = await axios.get(url, headers);
+  const res = await axios.get(url, headers);
 
-    return res.data;
+  return res.data;
 }
 
 export async function getListOfCurrency(): Promise<ListOfCurrencyDTO[]> {
   const url = `https://${currencyExchangeRapidapiHostEndpoint}/listquotes`;
   const headers = {
-      headers: {
-          'x-rapidapi-host': currencyExchangeRapidapiHostEndpoint,
-          'x-rapidapi-key': applicationKey,
-      }
+    headers: {
+      'x-rapidapi-host': currencyExchangeRapidapiHostEndpoint,
+      'x-rapidapi-key': applicationKey,
+  }
   };
 
   const res = await axios.get(url, headers);

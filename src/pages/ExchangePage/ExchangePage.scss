@@ -1,0 +1,111 @@
+.wrapExchangePage {
+  height: 100vh;
+
+  .wrapExchangeAccountButton {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+
+    .accountButton {
+      padding-left: 10px;
+      background: #0c3c63;
+      border: 1px solid white;
+      color: white;
+      border-radius: 5px;
+      width: 10%;
+    }
+  }
+}
+
+.wrapExchangePage {
+  .wrapWallet {
+    width: 80%;
+    padding: 80px;
+  
+    .wrapAmount {
+      display: block;
+      width: 100%;
+  
+      .amountCode {
+        font-weight: bold;
+        font-size: 55px;
+        justify-content: left;
+        display: flex;
+      }
+  
+      .amount {
+        font-size: 20px;
+        font-weight: normal;
+        color: #363636;
+        justify-content: space-between;
+        display: flex;
+      }
+    }
+  }
+}
+
+.wrapWalletPanelFrom {
+  width: 100%;
+  background: cornflowerblue;
+  padding-bottom: 20px;
+  position: relative;
+  height: 30vh;
+  z-index: 1;
+
+  .input {
+    position: absolute;
+    right: 0;
+    top: 30%;
+    bottom: 0;
+    width: 200px;
+
+    & input {
+      font-size: xx-large;
+    }
+
+    & .MuiInput-underline:before {
+      border-bottom: 0px;
+    }
+  }
+}
+
+.wrapWalletPanelTo {
+  width: 100%;
+  position: relative;
+  height: 30vh;
+
+  .input {
+    position: absolute;
+    right: 0;
+    top: 30%;
+    bottom: 0;
+    width: 200px;
+
+    & input {
+      font-size: xx-large;
+    }
+
+    & .MuiInput-underline:before {
+      border-bottom: 0px;
+    }
+  }
+}
+
+.wrapWalletPanelFrom:before {
+  content: '';
+  top: 300px;
+  left: 0;
+  right: 0;
+  border: 50px solid transparent;
+  border-top: 50px solid cornflowerblue;
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  margin: auto;
+}
+
+.wrapWalletPanelTo {
+  width: 100%;
+  background: white;
+  padding-bottom: 20px;
+}

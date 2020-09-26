@@ -9,6 +9,8 @@ import { connect } from "react-redux";
 import { getOperationDate } from "../../utils/date";
 import { Currencies } from "../../models/Currency";
 
+import './HistoryOperationsPocket.scss';
+
 interface HistoryOperationsPocketStateToProps {
   history: OperationHistory[],
   walletData: Currencies[];
@@ -29,12 +31,15 @@ class HistoryOperationsPocket extends Component<HistoryOperationsPocketProps> {
       case Operations.EXCHANGE:
         return (
           <ListItem>
-            <ListItemAvatar>
+            <ListItemAvatar className="operationIcon">
               { this.props.operationIcons[operation.typeOfOperation] }
             </ListItemAvatar>
             <ListItemText primary={ getOperationMessage(operation.typeOfOperation, toWalletCode) } secondary={ operationDate } />
-            <div>From: -{ this.props.walletData[fromWalletCode].symbol }{ fromWalletAmount }</div>
-            <div>To: +{ this.props.walletData[toWalletCode].symbol }{ toWalletAmount }</div>
+            <div className="wrapAmountChanges">
+              <div className="toAmountChanges">+{ this.props.walletData[toWalletCode].symbol }{ toWalletAmount }</div>
+              <div className="fromAmountChanges">-{ this.props.walletData[fromWalletCode].symbol }{ fromWalletAmount }</div>
+            </div>
+            
           </ListItem>
         )
       default:
@@ -47,13 +52,13 @@ class HistoryOperationsPocket extends Component<HistoryOperationsPocketProps> {
     let today = new Date().toLocaleDateString();
 
     return <>
-      <div> { today } </div>
+      <div className="today"> { today } </div>
 
-      <List>
+      <List className="operationsHistory">
         {
           history.length
             ? history.map((record: OperationHistory) => this.getListItem(record))
-          : <div> { messages.historyIsEmpty } </div>
+          : <div className="historyIsEmpty"> { messages.historyIsEmpty } </div>
         }
       </List>
     </>;

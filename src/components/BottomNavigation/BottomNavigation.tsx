@@ -7,6 +7,8 @@ import RedoOutlinedIcon from '@material-ui/icons/RedoOutlined';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
 import AccountBalanceWalletOutlinedIcon from '@material-ui/icons/AccountBalanceWalletOutlined';
 
+import './BottomNavigation.scss';
+
 const navigationIcons = {
   [NavigationButtons.account]: <AccountBalanceWalletOutlinedIcon />,
   [NavigationButtons.card]: <CreditCardIcon />,
@@ -28,10 +30,10 @@ export default class BottomNavigationComponent extends Component<BottomNavigatio
   
   render() {
     return (<>
-      <BottomNavigation value={this.props.active} onChange={this.handleNavigationChange}>
+      <BottomNavigation className="bottomNavigation" value={this.props.active} onChange={this.handleNavigationChange}>
         {
           this.props.navigationItems.map((item: NavigationButtons) =>
-            <BottomNavigationAction label={ item } value={ item.toLocaleLowerCase() } icon={ navigationIcons[item] } />
+            <BottomNavigationAction className="bottomNavigationButton" label={ item } value={ item.toLocaleLowerCase() } icon={ navigationIcons[item] } />
           )
         }
       </BottomNavigation>

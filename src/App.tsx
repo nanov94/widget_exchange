@@ -3,9 +3,9 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import './App.css';
 import BottomNavigationComponent from './components/BottomNavigation/BottomNavigation';
 import { NavigationButtons } from './constants';
-import AccountPage from './pages/AccountPage';
-import CardPage from './pages/CardPage';
-import ExchangePage from './pages/ExchangePage';
+import AccountPage from './pages/AccountPage/AccountPage';
+import CardPage from './pages/CardPage/CardPage';
+import ExchangePage from './pages/ExchangePage/ExchangePage';
 
 class App extends Component {
   state = {

@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { Currencies } from "../../models/Currency";
 import { changeActiveWallet } from "../../actions/pocketAction";
 
+import './Pockets.scss';
+
 interface PocketStateToProps {
   activeWalletNumber: number;
   walletData: Currencies;
@@ -30,11 +32,17 @@ class Pockets extends Component<PocketProps> {
       {
         this.props.wallets.map((walletKey) => {
           const wallet = this.props.walletData[walletKey];
+          const mainAmount = Math.trunc(wallet.amount);
+          const residueAmount = +(wallet.amount % 100).toFixed(0);
           return (
-            <>
-              <div> { wallet.symbol } { wallet.amount }</div>
-              <div> { wallet.code } - { wallet.name }</div>
-            </>
+            <div className="wrapWallet">
+              <div className="amount">
+                <div> { wallet.symbol }</div>
+                <div className="mainAmount"> { mainAmount }</div>
+                <div> { residueAmount ? '.' + residueAmount : '' }</div>
+              </div>
+              <div className="currencyName"> { wallet.code } - { wallet.name }</div>
+            </div>
           )
         })
       }

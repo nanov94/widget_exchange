@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import SwipeableViews from 'react-swipeable-views';
 import MobileStepper from '@material-ui/core/MobileStepper';
 
+import './Swipe.scss';
+
 interface SwipeProps {
   activeItem: number;
   changeActiveItem: (item: number) => void;
@@ -21,6 +23,8 @@ class Swipe extends Component<SwipeProps> {
           { this.props.children }
       </SwipeableViews>
       <MobileStepper
+        classes={ undefined }
+        className="swipeDots"
         variant="dots"
         steps={countSteps}
         position="static"
