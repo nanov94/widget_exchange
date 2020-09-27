@@ -16,6 +16,10 @@ export const messages = {
   historyIsEmpty: 'History is empty',
 }
 
+export const errorMessages = {
+  invalidValue: 'Invalid value',
+}
+
 export enum CurrencyCodes {
   EUR = 'EUR',
   RUB = 'RUB',

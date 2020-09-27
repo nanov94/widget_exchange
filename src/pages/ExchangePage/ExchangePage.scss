@@ -6,6 +6,10 @@
     justify-content: flex-end;
     width: 100%;
 
+    .disabledAccountButton {
+      background: grey !important;
+    }
+
     .accountButton {
       padding-left: 10px;
       background: #0c3c63;
@@ -15,6 +19,12 @@
       width: 10%;
     }
   }
+}
+
+.toastNotification {
+  position: absolute;
+  height: fit-content;
+  top: 20px;
 }
 
 .wrapExchangePage {

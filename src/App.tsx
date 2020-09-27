@@ -25,6 +25,7 @@ class App extends Component {
     return (
       <>
         <BrowserRouter>
+          <Route exact path='/' component={ AccountPage } />   
           <Route path={`/${NavigationButtons.account}`} component={ AccountPage }/>
           <Route path={`/${NavigationButtons.card}`} component={ StubPage }/>
           <Route path={`/${NavigationButtons.send}`} component={ StubPage }/>

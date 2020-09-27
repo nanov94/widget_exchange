@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Buttons, { ButtonData } from '../../components/Buttons/Buttons';
-import { NavigationButtons, Operations, TextButtons } from '../../constants';
+import { errorMessages, NavigationButtons, Operations, TextButtons } from '../../constants';
 import TextField from '@material-ui/core/TextField';
 import Swipe from '../../components/Swipe/Swipe';
 import { getExchangeCurrency } from '../../client/CurrencyExchangeRapidapiServiceClient';
@@ -9,11 +9,13 @@ import { Currencies } from '../../models/Currency';
 import { bindActionCreators } from 'redux';
 import actions from '../../actions';
 import { Route } from 'react-router-dom';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 import './ExchangePage.scss';
 import { getConvertationCurrencyReate } from '../../utils/currency';
 
-const buttons = [
+const buttons: ButtonData[] = [
   { button: TextButtons.cancel, actionData: NavigationButtons.account },
   { button: TextButtons.exchange, actionData: NavigationButtons.account }
 ];
@@ -39,6 +41,8 @@ class ExchangePage extends Component<ExchangeProps> {
     convertedAmount: 0,
     fromToRate: 0,
     toFromRate: 0,
+    isValidExchangeCurrency: true,
+    openToast: false,
   };
 
   handleChangeWallet = async (fromWalletNumber: number, toWalletNumber: number, exchangedAmount: number = this.state.exchangedAmount) => {
@@ -54,11 +58,11 @@ class ExchangePage extends Component<ExchangeProps> {
     Promise.all([exchangeCurrencyFromTo, exchangeCurrencyToFrom])    
       .then((result: any) => {
         this.setState((state) => ({
-          fromToRate: result[0].toFixed(2),
-          toFromRate: result[1].toFixed(2),
+          fromToRate: +result[0].toFixed(2),
+          toFromRate: +result[1].toFixed(2),
         }));
         this.setState((state) => ({
-          convertedAmount: exchangedAmount * this.state.fromToRate,
+          convertedAmount: +(exchangedAmount * this.state.fromToRate).toFixed(2),
           exchangedAmount: exchangedAmount,
         }));
       })
@@ -66,23 +70,29 @@ class ExchangePage extends Component<ExchangeProps> {
   };
 
   handleChangeAmount = (event: any) => {
-    const value = event.target.value;
-    
-    // TODO: Add check
-    // if (!Number(value)) {
-    //   event.target.value = this.state.exchangedAmount;
-    //   return; 
-    // }
+    const { walletData, wallets } = this.props;
 
+    const value = event.target.value;
+
+    if (!Number(value) || value > walletData[wallets[this.state.fromWalletNumber]].amount) {
+      this.setState((state) => ({ isValidExchangeCurrency: false, openToast: true }));
+      return; 
+    }
+
+    this.setState((state) => ({ isValidExchangeCurrency: true, openToast: false }));
     this.handleChangeWallet(this.state.fromWalletNumber, this.state.toWalletNumber, value);
   }
 
   handleButtonClick = (historyPush: (route: string) => void, buttonData: ButtonData) => {
-    switch(buttonData.button) {
-      case TextButtons.exchange:
-        this.exchangeCurrency();
-        break;
-      default: break;
+    const { isValidExchangeCurrency, exchangedAmount } = this.state;
+
+    if (isValidExchangeCurrency && exchangedAmount) {
+      switch(buttonData.button) {
+        case TextButtons.exchange:
+          this.exchangeCurrency();
+          break;
+        default: break;
+      }
     }
 
     historyPush(`/${buttonData.actionData}`);
@@ -101,9 +111,17 @@ class ExchangePage extends Component<ExchangeProps> {
       convertedAmount);
   }
 
+  handleCloseToast = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState((state) => ({ openToast: false }));
+  };
+
   render() {
     const { walletData, wallets } = this.props;
-    const { fromWalletNumber, toWalletNumber, toFromRate, fromToRate } = this.state;
+    const { fromWalletNumber, toWalletNumber, toFromRate, fromToRate, isValidExchangeCurrency, convertedAmount, openToast } = this.state;
 
     return (
       <div className="wrapExchangePage">
@@ -167,17 +185,39 @@ class ExchangePage extends Component<ExchangeProps> {
             }
           </Swipe>
           <TextField
-            className="input"
+            className='input'
             id="standard-basic"
             disabled
-            value={this.state.convertedAmount ? `+${this.state.convertedAmount}` : ''}
+            value={ convertedAmount ? `+${ convertedAmount}` : ''}
           />
         </div>
-        <Route render={({ history }) => (
-            <Buttons class="wrapExchangeAccountButton" buttonData={buttons} handleClick={(event: ButtonData) => this.handleButtonClick(history.push, event)}/>
-          )}
+        <Route render={({ history }) => {
+          if (!isValidExchangeCurrency) {
+            buttons.forEach((btn) => {
+              if (btn.button === TextButtons.exchange) {
+                btn.disabled = true;
+              }
+            });
+          } else {
+            buttons.forEach((btn) => {
+              if (btn.button === TextButtons.exchange) {
+                btn.disabled = false;
+              }
+            });
+          }
+          
+          return (
+            <Buttons class='wrapExchangeAccountButton'
+              buttonData={buttons}
+              handleClick={(event: ButtonData) => this.handleButtonClick(history.push, event)}/>
+          );
+        }}
         />
-        
+        <Snackbar className="toastNotification" open={openToast} autoHideDuration={5000} onClose={this.handleCloseToast}>
+          <Alert onClose={this.handleCloseToast} severity="error"> 
+            { errorMessages.invalidValue }
+          </Alert>
+        </Snackbar>
       </div>
     );
   }
