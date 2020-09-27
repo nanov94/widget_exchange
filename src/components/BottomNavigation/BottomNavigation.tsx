@@ -33,7 +33,7 @@ export default class BottomNavigationComponent extends Component<BottomNavigatio
       <BottomNavigation className="bottomNavigation" value={this.props.active} onChange={this.handleNavigationChange}>
         {
           this.props.navigationItems.map((item: NavigationButtons) =>
-            <BottomNavigationAction className="bottomNavigationButton" label={ item } value={ item.toLocaleLowerCase() } icon={ navigationIcons[item] } />
+            <BottomNavigationAction key={ item } className="bottomNavigationButton" label={ item } value={ item.toLocaleLowerCase() } icon={ navigationIcons[item] } />
           )
         }
       </BottomNavigation>

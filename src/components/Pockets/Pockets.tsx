@@ -35,7 +35,7 @@ class Pockets extends Component<PocketProps> {
           const mainAmount = Math.trunc(wallet.amount);
           const residueAmount = +(wallet.amount % 100).toFixed(0);
           return (
-            <div className="wrapWallet">
+            <div key={ walletKey } className="wrapWallet">
               <div className="amount">
                 <div> { wallet.symbol }</div>
                 <div className="mainAmount"> { mainAmount }</div>

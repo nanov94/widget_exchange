@@ -17,10 +17,10 @@ class Buttons extends Component<ButtonsProps> {
   render() {
     return (<div className={ this.props.class }>
         {
-          this.props.buttonData.map((btn: any) => {
+          this.props.buttonData.map((btn: any, id: number) => {
             const className = btn.disabled === true ? 'disabledAccountButton accountButton' : 'accountButton';
             return (
-              <IconButton className={ className } color="primary" aria-label="upload picture" component="span" onClick={() => btn.disabled || this.props.handleClick(btn)}>
+              <IconButton key={ id } className={ className } color="primary" aria-label="upload picture" component="span" onClick={() => btn.disabled || this.props.handleClick(btn)}>
                 { btn.button }
               </IconButton>
             );
