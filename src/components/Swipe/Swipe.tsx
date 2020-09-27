@@ -1,11 +1,8 @@
 import React, { Component } from "react";
 import SwipeableViews from 'react-swipeable-views';
 import MobileStepper from '@material-ui/core/MobileStepper';
-// import { virtualize } from 'react-swipeable-views-utils';
 
 import './Swipe.scss';
-
-// const VirtualizeSwipeableViews = virtualize(SwipeableViews);
 
 interface SwipeProps {
   activeItem: number;
@@ -19,7 +16,6 @@ class Swipe extends Component<SwipeProps> {
 
     return (<>
       <SwipeableViews
-        // key={ activeItem }
         axis={'x'}
         index={ activeItem }
         onChangeIndex={ changeActiveItem }
