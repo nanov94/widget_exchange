@@ -23,14 +23,14 @@ interface HistoryOperationsPocketBaseProps {
 type HistoryOperationsPocketProps = HistoryOperationsPocketBaseProps & HistoryOperationsPocketStateToProps;
 
 class HistoryOperationsPocket extends Component<HistoryOperationsPocketProps> {
-  getListItem = (operation: OperationHistory) => {
+  getListItem = (operation: OperationHistory, id: number) => {
     const { fromWalletCode, toWalletCode, fromWalletAmount, toWalletAmount } = operation.dataset;
     const operationDate = getOperationDate(operation.date);
 
     switch(operation.typeOfOperation) {
       case Operations.EXCHANGE:
         return (
-          <ListItem>
+          <ListItem key={ id }>
             <ListItemAvatar className="operationIcon">
               { this.props.operationIcons[operation.typeOfOperation] }
             </ListItemAvatar>
@@ -57,7 +57,7 @@ class HistoryOperationsPocket extends Component<HistoryOperationsPocketProps> {
       <List className="operationsHistory">
         {
           history.length
-            ? history.map((record: OperationHistory) => this.getListItem(record))
+            ? history.map((record: OperationHistory, id: number) => this.getListItem(record, id))
           : <div className="historyIsEmpty"> { messages.historyIsEmpty } </div>
         }
       </List>

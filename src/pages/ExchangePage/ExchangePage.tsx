@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Buttons, { ButtonData } from '../../components/Buttons/Buttons';
-import { errorMessages, NavigationButtons, Operations, TextButtons } from '../../constants';
+import { AlertTypes, errorMessages, NavigationButtons, Operations, TextButtons } from '../../constants';
 import TextField from '@material-ui/core/TextField';
 import Swipe from '../../components/Swipe/Swipe';
 import { getExchangeCurrency } from '../../client/CurrencyExchangeRapidapiServiceClient';
@@ -9,11 +9,10 @@ import { Currencies } from '../../models/Currency';
 import { bindActionCreators } from 'redux';
 import actions from '../../actions';
 import { Route } from 'react-router-dom';
-import Snackbar from '@material-ui/core/Snackbar';
-import Alert from '@material-ui/lab/Alert';
 
 import './ExchangePage.scss';
 import { getConvertationCurrencyReate } from '../../utils/currency';
+import AlertComponent from '../../components/Alert/Alert';
 
 const buttons: ButtonData[] = [
   { button: TextButtons.cancel, actionData: NavigationButtons.account },
@@ -42,8 +41,19 @@ class ExchangePage extends Component<ExchangeProps> {
     fromToRate: 0,
     toFromRate: 0,
     isValidExchangeCurrency: true,
-    openToast: false,
+    toastNotification: {
+      type: AlertTypes.error,
+      openToast: false,
+      message: '',
+    }
   };
+
+  wrapper: any;
+
+  constructor(props: ExchangeProps) {
+    super(props);
+    this.wrapper = React.createRef();
+  }
 
   handleChangeWallet = async (fromWalletNumber: number, toWalletNumber: number, exchangedAmount: number = this.state.exchangedAmount) => {
     const { walletData, wallets } = this.props;
@@ -74,8 +84,36 @@ class ExchangePage extends Component<ExchangeProps> {
 
     const value = event.target.value;
 
-    if (!Number(value) || value > walletData[wallets[this.state.fromWalletNumber]].amount) {
-      this.setState((state) => ({ isValidExchangeCurrency: false, openToast: true }));
+    if (value !== '' && (!Number(value) || value > walletData[wallets[this.state.fromWalletNumber]].amount)) {
+      this.setState((state) => ({
+        isValidExchangeCurrency: false,
+        convertedAmount: 0,
+        toastNotification: {
+          openToast: true,
+          type: AlertTypes.error,
+          message: errorMessages.invalidValue
+        }
+      }));
+      return; 
+    }
+
+    
+    if (value.substring(value.length, value.indexOf('.') + 1).length > 2) {
+      Object.create(event, {
+        target: {
+            value: Number(value).toFixed(2)
+        }
+      });
+      
+      this.setState((state) => ({
+        isValidExchangeCurrency: false,
+        convertedAmount: 0,
+        toastNotification: {
+          openToast: true,
+          type: AlertTypes.warning,
+          message: errorMessages.twoDigitsAfterDot
+        }
+      }));
       return; 
     }
 
@@ -111,82 +149,87 @@ class ExchangePage extends Component<ExchangeProps> {
       convertedAmount);
   }
 
-  handleCloseToast = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    this.setState((state) => ({ openToast: false }));
+  handleCloseToast = () => {
+    this.setState((state) => ({ toastNotification: { openToast: false } }));
   };
 
-  render() {
+  getSwipeFromWalletData = () => {
     const { walletData, wallets } = this.props;
-    const { fromWalletNumber, toWalletNumber, toFromRate, fromToRate, isValidExchangeCurrency, convertedAmount, openToast } = this.state;
+    const { fromWalletNumber, toWalletNumber, toFromRate } = this.state;
+
+    return wallets.map((walletKey: string) => {
+      const wallet = walletData[walletKey];
+      return (
+        <div key={ `from_${walletKey}` } className="wrapWallet">
+          <div className="wrapAmount">
+            <div className="amountCode">
+              { wallet.code }
+            </div>
+            <div className="amount">
+              <div> You have { wallet.symbol } { wallet.amount.toFixed(2) }</div>
+              <div>
+                { getConvertationCurrencyReate(walletData, wallets, fromWalletNumber, toWalletNumber, toFromRate) }
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    });
+  }
+
+  getSwipeToWalletData = () => {
+    const { walletData, wallets } = this.props;
+    const { fromWalletNumber, toWalletNumber, fromToRate } = this.state;
+
+    return wallets.map((walletKey) => {
+      const wallet = walletData[walletKey];
+      return (
+        <div key={ `to_${walletKey}` } className="wrapWallet">
+          <div className="wrapAmount">
+            <div className="amountCode">
+              { wallet.code }
+            </div>
+            <div className="amount">
+              <div> You have { wallet.symbol } { wallet.amount.toFixed(2) }</div>
+              <div>
+                { getConvertationCurrencyReate(walletData, wallets, toWalletNumber, fromWalletNumber, fromToRate) }
+                </div>
+            </div>
+          </div>
+        </div>
+      );
+    });
+  }
+
+  render() {
+    const { wallets } = this.props;
+    const { isValidExchangeCurrency, convertedAmount, toastNotification: { openToast, type, message } } = this.state;
 
     return (
       <div className="wrapExchangePage">
         <div className="wrapWalletPanelFrom">
-          <Swipe
-            activeItem={ this.state.fromWalletNumber }
-            changeActiveItem={(num: number) => this.handleChangeWallet(num, this.state.toWalletNumber)}
-            countSteps={ wallets.length }>
-            {
-              wallets.map((walletKey: string) => {
-                const wallet = walletData[walletKey];
-                return (
-                  <div className="wrapWallet">
-                    <div className="wrapAmount">
-                      <div className="amountCode">
-                        { wallet.code }
-                      </div>
-                      <div className="amount">
-                        <div> You have { wallet.symbol } { wallet.amount }</div>
-                        <div>
-                          { getConvertationCurrencyReate(walletData, wallets, fromWalletNumber, toWalletNumber, toFromRate) }
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )
-              })
-            }
-          </Swipe>
           <TextField
             className="input"
-            id="standard-basic"
             label="Value"
             onChange={(event) => this.handleChangeAmount(event)}
           />
+          <Swipe
+            activeItem={ this.state.fromWalletNumber }
+            changeActiveItem={(num: number) => this.handleChangeWallet(num, this.state.toWalletNumber)}
+            countSteps={ wallets.length }
+            swipeChildren={ this.getSwipeFromWalletData() }>
+          </Swipe>
+          
         </div>
         <div className="wrapWalletPanelTo">
           <Swipe
             activeItem={ this.state.toWalletNumber }
             changeActiveItem={(num: number) => this.handleChangeWallet(this.state.fromWalletNumber, num)}
-            countSteps={ wallets.length }>
-            {
-              wallets.map((walletKey) => {
-                const wallet = walletData[walletKey];
-                return (
-                  <div className="wrapWallet">
-                    <div className="wrapAmount">
-                      <div className="amountCode">
-                        { wallet.code }
-                      </div>
-                      <div className="amount">
-                        <div> You have { wallet.symbol } { wallet.amount }</div>
-                        <div>
-                          { getConvertationCurrencyReate(walletData, wallets, toWalletNumber, fromWalletNumber, fromToRate) }
-                          </div>
-                      </div>
-                    </div>
-                  </div>
-                )
-              })
-            }
+            countSteps={ wallets.length }
+            swipeChildren={ this.getSwipeToWalletData() }>
           </Swipe>
           <TextField
             className='input'
-            id="standard-basic"
             disabled
             value={ convertedAmount ? `+${ convertedAmount}` : ''}
           />
@@ -213,11 +256,13 @@ class ExchangePage extends Component<ExchangeProps> {
           );
         }}
         />
-        <Snackbar className="toastNotification" open={openToast} autoHideDuration={5000} onClose={this.handleCloseToast}>
-          <Alert onClose={this.handleCloseToast} severity="error"> 
-            { errorMessages.invalidValue }
-          </Alert>
-        </Snackbar>
+        {
+          openToast && <AlertComponent
+              type={ type }
+              message={ message }
+              closeAction={ () => this.handleCloseToast() }>
+            </AlertComponent>
+        }
       </div>
     );
   }

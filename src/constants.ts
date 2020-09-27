@@ -18,6 +18,14 @@ export const messages = {
 
 export const errorMessages = {
   invalidValue: 'Invalid value',
+  twoDigitsAfterDot: 'Could you please use two digits after dot',
+}
+
+export enum AlertTypes {
+  error = 'error',
+  warning = 'warning',
+  info = 'info',
+  success = 'success',
 }
 
 export enum CurrencyCodes {

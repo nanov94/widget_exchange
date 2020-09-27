@@ -1,27 +1,35 @@
 import React, { Component } from "react";
-import SwipeableViews from 'react-swipeable-views';
 import MobileStepper from '@material-ui/core/MobileStepper';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
+import 'swiper/swiper.scss';
 import './Swipe.scss';
 
 interface SwipeProps {
   activeItem: number;
   changeActiveItem: (item: number) => void;
   countSteps: number;
+  swipeChildren: any[];
 }
 
 class Swipe extends Component<SwipeProps> {
   render() {
-    const { activeItem, changeActiveItem, countSteps } = this.props;
+    const { activeItem, changeActiveItem, countSteps, swipeChildren } = this.props;
+    const swipeElements: any[] = [];
+
+    swipeChildren.forEach((child, id) => {
+      swipeElements.push(<SwiperSlide key={ id }> { child } </SwiperSlide>);
+    });
 
     return (<>
-      <SwipeableViews
-        axis={'x'}
-        index={ activeItem }
-        onChangeIndex={ changeActiveItem }
-        enableMouseEvents>
-          { this.props.children }
-      </SwipeableViews>
+    <Swiper
+      spaceBetween={0}
+      slidesPerView={1}
+      scrollbar={{ draggable: true }}
+      onSlideChange={(item) => changeActiveItem(item.activeIndex)}
+    >
+      { swipeElements }
+    </Swiper>
       <MobileStepper
         classes={ undefined }
         className="swipeDots"

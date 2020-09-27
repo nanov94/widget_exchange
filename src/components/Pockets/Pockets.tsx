@@ -24,28 +24,31 @@ class Pockets extends Component<PocketProps> {
     this.setState((state) => ({ activeWalletNumber: walletNumber }));
   };
 
+  getSwipeWalletData = () => {
+    return this.props.wallets.map((walletKey) => {
+      const wallet = this.props.walletData[walletKey];
+      const mainAmount = Math.trunc(wallet.amount);
+      const residueAmount = +(wallet.amount % 100).toFixed(0);
+
+      return (
+        <div key={ walletKey } className="wrapWallet">
+          <div className="amount">
+            <div> { wallet.symbol }</div>
+            <div className="mainAmount"> { mainAmount }</div>
+            <div> { residueAmount ? '.' + residueAmount : '' }</div>
+          </div>
+          <div className="currencyName"> { wallet.code } - { wallet.name }</div>
+        </div>
+      );
+    });
+  }
+
   render() {
     return (<Swipe
       activeItem={ this.props.activeWalletNumber }
       changeActiveItem={(num: number) => this.handleChangeWallet(num)}
-      countSteps={ this.props.wallets.length }>
-      {
-        this.props.wallets.map((walletKey) => {
-          const wallet = this.props.walletData[walletKey];
-          const mainAmount = Math.trunc(wallet.amount);
-          const residueAmount = +(wallet.amount % 100).toFixed(0);
-          return (
-            <div key={ walletKey } className="wrapWallet">
-              <div className="amount">
-                <div> { wallet.symbol }</div>
-                <div className="mainAmount"> { mainAmount }</div>
-                <div> { residueAmount ? '.' + residueAmount : '' }</div>
-              </div>
-              <div className="currencyName"> { wallet.code } - { wallet.name }</div>
-            </div>
-          )
-        })
-      }
+      countSteps={ this.props.wallets.length }
+      swipeChildren={ this.getSwipeWalletData() }>
     </Swipe>);
   }
 }

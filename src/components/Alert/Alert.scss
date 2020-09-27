@@ -1,0 +1,11 @@
+.toastNotification {
+  position: absolute;
+  top: 20px;
+  z-index: 1;
+}
+
+.wrapToastNotification {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
