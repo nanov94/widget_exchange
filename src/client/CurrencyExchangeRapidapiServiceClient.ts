@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { currencyExchangeRapidapiHostEndpoint } from '../constants';
-import { applicationKey } from '../configuration/configuration';
+import { currencyExchangeApplicationKey, freeCurrconvApplicationKey } from '../configuration/configuration';
 import { ListOfCurrencyDTO } from './DTOs/ListOfCurrency';
 
 // Resource: https://rapidapi.com/fyhao/api/currency-exchange?endpoint=53aa60c0e4b0596140341c57
@@ -9,7 +9,7 @@ export async function getExchangeCurrency(from: string, to: string): Promise<num
   const headers = {
     headers: {
       'x-rapidapi-host': currencyExchangeRapidapiHostEndpoint,
-      'x-rapidapi-key': applicationKey,
+      'x-rapidapi-key': currencyExchangeApplicationKey,
     }
   };
 
@@ -19,7 +19,7 @@ export async function getExchangeCurrency(from: string, to: string): Promise<num
 }
 
 export async function getListOfCurrency(): Promise<ListOfCurrencyDTO> {
-  const url = `https://free.currconv.com/api/v7/currencies?apiKey=do-not-use-this-key`;
+  const url = `https://free.currconv.com/api/v7/currencies?apiKey=${freeCurrconvApplicationKey}`;
 
   const res = await axios.get(url);
 

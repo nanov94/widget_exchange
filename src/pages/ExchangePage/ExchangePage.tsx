@@ -80,11 +80,18 @@ class ExchangePage extends Component<ExchangeProps> {
   };
 
   handleChangeAmount = (event: any) => {
-    const { walletData, wallets } = this.props;
-
     const value = event.target.value;
 
-    if (value !== '' && (!Number(value) || value > walletData[wallets[this.state.fromWalletNumber]].amount)) {
+    if (this.isNumber(value) && this.hasCorrectFormat(value)) {
+      this.setState((state) => ({ isValidExchangeCurrency: true, openToast: false }));
+      this.handleChangeWallet(this.state.fromWalletNumber, this.state.toWalletNumber, value);
+    }
+  }
+
+  isNumber = (value: string) => {
+    const { walletData, wallets } = this.props;
+
+    if (value !== '' && (!Number(value) || Number(value) > walletData[wallets[this.state.fromWalletNumber]].amount)) {
       this.setState((state) => ({
         isValidExchangeCurrency: false,
         convertedAmount: 0,
@@ -94,17 +101,14 @@ class ExchangePage extends Component<ExchangeProps> {
           message: errorMessages.invalidValue
         }
       }));
-      return; 
+      return false; 
     }
 
-    
-    if (value.substring(value.length, value.indexOf('.') + 1).length > 2) {
-      Object.create(event, {
-        target: {
-            value: Number(value).toFixed(2)
-        }
-      });
-      
+    return true;
+  }
+
+  hasCorrectFormat = (value: string) => {
+    if (value.substring(value.length, value.indexOf('.') + 1).length > 2) {      
       this.setState((state) => ({
         isValidExchangeCurrency: false,
         convertedAmount: 0,
@@ -114,11 +118,10 @@ class ExchangePage extends Component<ExchangeProps> {
           message: errorMessages.twoDigitsAfterDot
         }
       }));
-      return; 
+      return false; 
     }
 
-    this.setState((state) => ({ isValidExchangeCurrency: true, openToast: false }));
-    this.handleChangeWallet(this.state.fromWalletNumber, this.state.toWalletNumber, value);
+    return true;
   }
 
   handleButtonClick = (historyPush: (route: string) => void, buttonData: ButtonData) => {
