@@ -1,4 +1,4 @@
-import { EXCHANGE, CHANGE_ACTIVE_WALLET, UPDATE_HISTORY_POCKET } from '../actions/actionTypes';
+import { EXCHANGE, CHANGE_ACTIVE_WALLET, UPDATE_HISTORY_POCKET, ADD_WALLET } from '../actions/actionTypes';
 import { currencies, CurrencyCodes, Operations } from "../constants";
 import { Currencies } from "../models/Currency";
 import { DataSetOperationHistory, ExchangeOperationHistory, OperationHistory } from '../models/OperationHistory';
@@ -29,6 +29,8 @@ const pocketReducer = (state = { ...defaultState }, action: any) => {
       }
     case UPDATE_HISTORY_POCKET:
       return updateHistoryPocket(state, action);
+    case ADD_WALLET:
+      return addNewWallet(state, action);
     default:
       return state;
   }
@@ -79,6 +81,22 @@ function updateHistoryPocket(state: any, action: any) {
   return {
     ...state,
     history: updatedHistory,
+  }
+}
+
+function addNewWallet(state: any, action: any) {
+  const { code, name, symbol } = action.payload;
+
+  const newWalletData = {...state.walletData};
+  const newWallets = [...state.wallets];
+
+  newWalletData[code] = { amount: 0, code, name, symbol };
+  newWallets.push(code);
+
+  return {
+    ...state,
+    walletData: newWalletData,
+    wallets: newWallets,
   }
 }
 

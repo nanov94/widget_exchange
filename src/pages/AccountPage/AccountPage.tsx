@@ -41,10 +41,10 @@ export default class AccountPage extends Component {
       <div className="wrapAccountPage">
         <div className="wrapPocketPanel">
           <Pockets></Pockets>
-          <Route render={({ history}) => (
-              <Buttons class="wrapAccountButton" buttonData={buttons} handleClick={(event: ButtonData) => this.handleButtonClick(history.push, event.actionData)} />
-            )}
-          />
+            <Route render={({ history }) => (
+                <Buttons class="wrapAccountButton" buttonData={buttons} handleClick={(event: ButtonData) => this.handleButtonClick(history.push, event.actionData)} />
+              )}
+            />
         </div>
         <div className="wrapHistoryPanel">
           <HistoryOperationsPocket operationIcons={ this.state.operations }></HistoryOperationsPocket>

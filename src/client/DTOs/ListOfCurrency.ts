@@ -1,9 +1,9 @@
 export interface ListOfCurrencyDTO {
-  currencies: CurrencyDTO[];
+  [key: string]: CurrencyDTO;
 }
 
 export interface CurrencyDTO {
-  code: string;
-  name: string;
-  symbol: string;
+  currencyName: string;
+  currencySymbol: string;
+  id: string;
 }

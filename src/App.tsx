@@ -6,6 +6,7 @@ import { ActionButtons, NavigationButtons } from './constants';
 import AccountPage from './pages/AccountPage/AccountPage';
 import StubPage from './pages/StubPage/StubPage';
 import ExchangePage from './pages/ExchangePage/ExchangePage';
+import TopUpPage from './pages/TopUpPage/TopUpPage';
 
 class App extends Component {
   state = {
@@ -32,6 +33,7 @@ class App extends Component {
           <Route path={`/${NavigationButtons.support}`} component={ StubPage }/>
           <Route path={`/${NavigationButtons.profile}`} component={ StubPage }/>
           <Route path={`/${ActionButtons.exchange}`} component={ ExchangePage }/>
+          <Route path={`/${ActionButtons.topup}`} component={ TopUpPage }/>
           <Route render={(props) => {
             const { history: { push }} = props;
             return (
