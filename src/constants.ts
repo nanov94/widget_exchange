@@ -30,6 +30,12 @@ export enum NavigationButtons {
   profile = 'Profile',
 }
 
+export enum ActionButtons {
+  exchange = 'Exchange',
+  topup = 'TopUp',
+  bank = 'Bank',
+}
+
 export enum Operations {
   EXCHANGE,
   TOP_UP,

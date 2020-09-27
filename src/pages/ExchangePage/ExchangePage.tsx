@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Buttons from '../../components/Buttons/Buttons';
-import { Operations, TextButtons } from '../../constants';
+import Buttons, { ButtonData } from '../../components/Buttons/Buttons';
+import { NavigationButtons, Operations, TextButtons } from '../../constants';
 import TextField from '@material-ui/core/TextField';
 import Swipe from '../../components/Swipe/Swipe';
 import { getExchangeCurrency } from '../../client/CurrencyExchangeRapidapiServiceClient';
@@ -8,11 +8,15 @@ import { connect } from 'react-redux';
 import { Currencies } from '../../models/Currency';
 import { bindActionCreators } from 'redux';
 import actions from '../../actions';
+import { Route } from 'react-router-dom';
 
 import './ExchangePage.scss';
 import { getConvertationCurrencyReate } from '../../utils/currency';
 
-const buttons = [TextButtons.cancel, TextButtons.exchange];
+const buttons = [
+  { button: TextButtons.cancel, actionData: NavigationButtons.account },
+  { button: TextButtons.exchange, actionData: NavigationButtons.account }
+];
 
 interface ExchangeStateToProps {
   activeWalletNumber: number;
@@ -73,13 +77,15 @@ class ExchangePage extends Component<ExchangeProps> {
     this.handleChangeWallet(this.state.fromWalletNumber, this.state.toWalletNumber, value);
   }
 
-  handleButtonClick = (button: string) => {
-    switch(button) {
+  handleButtonClick = (historyPush: (route: string) => void, buttonData: ButtonData) => {
+    switch(buttonData.button) {
       case TextButtons.exchange:
         this.exchangeCurrency();
         break;
       default: break;
     }
+
+    historyPush(`/${buttonData.actionData}`);
   }
 
   exchangeCurrency = () => {
@@ -167,7 +173,11 @@ class ExchangePage extends Component<ExchangeProps> {
             value={this.state.convertedAmount ? `+${this.state.convertedAmount}` : ''}
           />
         </div>
-        <Buttons class="wrapExchangeAccountButton" buttons={buttons} handleClick={(event) => this.handleButtonClick(event)}/>
+        <Route render={({ history }) => (
+            <Buttons class="wrapExchangeAccountButton" buttonData={buttons} handleClick={(event: ButtonData) => this.handleButtonClick(history.push, event)}/>
+          )}
+        />
+        
       </div>
     );
   }

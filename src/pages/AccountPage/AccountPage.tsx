@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import Buttons from '../../components/Buttons/Buttons';
+import Buttons, { ButtonData } from '../../components/Buttons/Buttons';
 import HistoryOperationsPocket from '../../components/HistoryOperationsPocket/HistoryOperationsPocket';
 import Pockets from '../../components/Pockets/Pockets';
-import { Operations } from '../../constants';
+import { ActionButtons, Operations } from '../../constants';
+import { Route } from 'react-router-dom'
 
 import ArrowRightAltSharpIcon from '@material-ui/icons/ArrowRightAltSharp';
 import AddSharpIcon from '@material-ui/icons/AddSharp';
@@ -19,9 +20,18 @@ export default class AccountPage extends Component {
     },
   }
 
+  handleButtonClick = (historyPush: (route: string) => void, action: string) => {
+    historyPush(`/${action}`);
+  }
+
   getActionButtons() {
     const { operations } = this.state;
-    return [operations[Operations.TOP_UP], operations[Operations.EXCHANGE], operations[Operations.BANK]];
+
+    return [
+      { button: operations[Operations.TOP_UP], actionData: ActionButtons.topup },
+      { button: operations[Operations.EXCHANGE], actionData: ActionButtons.exchange },
+      { button: operations[Operations.BANK], actionData: ActionButtons.bank }
+    ];
   }
 
   render() {
@@ -31,7 +41,10 @@ export default class AccountPage extends Component {
       <div className="wrapAccountPage">
         <div className="wrapPocketPanel">
           <Pockets></Pockets>
-          <Buttons class="wrapAccountButton" buttons={buttons} handleClick={( ) => {}} />
+          <Route render={({ history}) => (
+              <Buttons class="wrapAccountButton" buttonData={buttons} handleClick={(event: ButtonData) => this.handleButtonClick(history.push, event.actionData)} />
+            )}
+          />
         </div>
         <div className="wrapHistoryPanel">
           <HistoryOperationsPocket operationIcons={ this.state.operations }></HistoryOperationsPocket>
