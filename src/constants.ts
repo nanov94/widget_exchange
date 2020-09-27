@@ -1,6 +1,8 @@
 
 export const currencyExchangeRapidapiHostEndpoint = 'currency-exchange.p.rapidapi.com';
 
+export const repeatRequestSeconds = 10000;
+
 export const currencies = {
   EUR: { code: 'EUR', name: 'Euro', symbol: '€' },
   RUB: { code: 'RUB', name: 'Russian ruble', symbol: '₽' },

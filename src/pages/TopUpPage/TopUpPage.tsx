@@ -4,13 +4,14 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { CurrencyDTO, ListOfCurrencyDTO } from '../../client/DTOs/ListOfCurrency';
 import { getListOfCurrency } from '../../client/CurrencyExchangeRapidapiServiceClient';
-
-import './TopUpPage.scss';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { bindActionCreators } from 'redux';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
-import { NavigationButtons } from '../../constants';
+import { NavigationButtons, repeatRequestSeconds } from '../../constants';
+
+import './TopUpPage.scss';
 
 interface TopUpPageDispatchToProps {
   addWallet: (code: string, name: string, symbol: string) => void;
@@ -19,13 +20,26 @@ interface TopUpPageDispatchToProps {
 class TopUpPage extends Component<TopUpPageDispatchToProps> {
   state = {
     currencies: [],
+    timerId: 0,
   }
 
   componentWillUnmount() {
-
+    clearInterval(this.state.timerId);
   }
 
   componentDidMount() {
+    this.updateListOfCurrency();
+    const timerId = setInterval(() => this.updateListOfCurrency(), repeatRequestSeconds);
+
+    this.setState((state) => ({ timerId }));
+  }
+
+  updateListOfCurrency = () => {
+    // This code demonstrate spiner every 10 seconds on ui
+    this.setState((state) => ({
+      currencies: [],
+    }));
+
     getListOfCurrency()
     .then((result: ListOfCurrencyDTO) => {
       const currencyArray: any[] = [];
@@ -36,7 +50,7 @@ class TopUpPage extends Component<TopUpPageDispatchToProps> {
 
       this.setState((state) => ({
         currencies: currencyArray,
-      }))
+      }));
     })
     .catch((error: any) => console.log(`Server is not available! Error: ${error}.`));
   }
@@ -56,6 +70,11 @@ class TopUpPage extends Component<TopUpPageDispatchToProps> {
   }
 
 	render() {
+    if (!this.state.currencies.length) {
+      return <div className="wrapSpiner">
+        <CircularProgress />
+      </div>;
+    }
 		return <>
       <div className="today"> Add new wallet </div>
 
